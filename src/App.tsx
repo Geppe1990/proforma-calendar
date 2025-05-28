@@ -3,6 +3,8 @@ import { useEffect, useState } from "react"
 import dayjs from "dayjs"
 import EventsByDate from "./components/EventsByDate"
 import LoginButton from "./components/LoginButton"
+import EventSummary from "./components/EventSummary.tsx"
+import "./App.css"
 
 export interface CalendarEvent {
 	id: string
@@ -31,29 +33,51 @@ export default function App() {
 		const start = now.startOf("month").toISOString()
 		const end = now.endOf("month").toISOString()
 
-		const res = await fetch(
-			`https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${start}&timeMax=${end}&singleEvents=true&orderBy=startTime`,
-			{
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			}
-		)
+		try {
+			const res = await fetch(
+				`https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${start}&timeMax=${end}&singleEvents=true&orderBy=startTime`,
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			)
 
-		const data = await res.json()
-		setEvents(data.items || [])
+			if (res.status === 401) {
+				// Token non valido o scaduto
+				console.warn("Token non valido. Rimuovo e richiedo login.")
+				localStorage.removeItem("google_token")
+				setAccessToken(null)
+				setEvents([])
+				return
+			}
+
+			const data = await res.json()
+			setEvents(data.items || [])
+		} catch (error) {
+			console.error("Errore nel recupero eventi:", error)
+		}
 	}
 
 	useEffect(() => {
 		const token = localStorage.getItem("google_token")
 		if (token) {
-			setAccessToken(token)
-			fetchEvents(token)
+			// Verifica validità del token
+			fetch(`https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${token}`)
+				.then((res) => {
+					if (!res.ok) throw new Error("Token scaduto")
+					setAccessToken(token)
+					fetchEvents(token)
+				})
+				.catch(() => {
+					localStorage.removeItem("google_token")
+					setAccessToken(null)
+				})
 		}
 	}, [])
 
 	return (
-		<div className="p-6 max-w-3xl mx-auto">
+		<div className="max-w-3xl mx-auto">
 			{!accessToken ? (
 				<LoginButton onClick={login} />
 			) : (
@@ -61,7 +85,14 @@ export default function App() {
 					<h1 className="text-2xl font-bold mb-4">
 						Eventi di {dayjs().format("MMMM YYYY")}
 					</h1>
-					<EventsByDate events={events} />
+					<div className="flex justify-between gap-8 flex-col md:flex-row">
+						<div className="flex-1">
+							<EventsByDate events={events} />
+						</div>
+						<div className="flex-1">
+							<EventSummary events={events} />
+						</div>
+					</div>
 				</>
 			)}
 		</div>
