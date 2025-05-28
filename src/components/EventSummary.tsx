@@ -1,5 +1,6 @@
 import type { CalendarEvent } from "../App"
 import dayjs from "dayjs"
+import settings from "../../settings.ts"
 
 interface EventSummaryProps {
 	events: CalendarEvent[]
@@ -13,7 +14,7 @@ export default function EventSummary({ events }: EventSummaryProps) {
 		const rawTitle = event.summary || "(Senza titolo)"
 		const normalizedTitle = rawTitle.trim()
 
-		// Salva la versione originale solo la prima volta (per visualizzarla correttamente)
+		// Salva la versione originale solo la prima volta
 		if (!titlesMap[normalizedTitle]) {
 			titlesMap[normalizedTitle] = rawTitle
 		}
@@ -30,8 +31,17 @@ export default function EventSummary({ events }: EventSummaryProps) {
 	})
 
 	const summaries = Object.entries(durations)
-
 	if (summaries.length === 0) return null
+
+	const totalMinutes = summaries.reduce((acc, [, min]) => acc + min, 0)
+	const totalHours = totalMinutes / 60
+	const totalFormatted = (() => {
+		const h = Math.floor(totalMinutes / 60)
+		const m = totalMinutes % 60
+		return h > 0 && m > 0 ? `${h}h ${m}min` : h > 0 ? `${h}h` : `${m}min`
+	})()
+
+	const compensoTotale = (totalHours * settings.rate).toFixed(2)
 
 	return (
 		<div className="mt-8">
@@ -50,10 +60,16 @@ export default function EventSummary({ events }: EventSummaryProps) {
 
 					return (
 						<li key={normalizedTitle}>
-							{displayTitle}: {formatted}
+							{displayTitle}: <b>{formatted}</b>
 						</li>
 					)
 				})}
+				<li className="mt-4 font-semibold text-black border-t pt-2">
+					Totale ore: <b>{totalFormatted}</b>
+				</li>
+				<li className="text-black">
+					Compenso: <b>{compensoTotale} €</b>
+				</li>
 			</ul>
 		</div>
 	)

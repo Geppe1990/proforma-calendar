@@ -1,10 +1,12 @@
 import { useGoogleLogin } from "@react-oauth/google"
 import { useEffect, useState } from "react"
 import dayjs from "dayjs"
+import "dayjs/locale/it"
 import EventsByDate from "./components/EventsByDate"
 import LoginButton from "./components/LoginButton"
 import EventSummary from "./components/EventSummary.tsx"
 import "./App.css"
+import settings from "../settings.ts"
 
 export interface CalendarEvent {
 	id: string
@@ -29,6 +31,7 @@ export default function App() {
 	})
 
 	const fetchEvents = async (token: string) => {
+		dayjs.locale("it")
 		const now = dayjs()
 		const start = now.startOf("month").toISOString()
 		const end = now.endOf("month").toISOString()
@@ -82,8 +85,9 @@ export default function App() {
 				<LoginButton onClick={login} />
 			) : (
 				<>
-					<h1 className="text-2xl font-bold mb-4">
-						Eventi di {dayjs().format("MMMM YYYY")}
+					<h1 className={"text-3xl font-bold mb-6"}>
+						Proforma {settings.firstName} {settings.lastName}{" "}
+						{dayjs().format("MMMM YYYY")}
 					</h1>
 					<div className="flex justify-between gap-8 flex-col md:flex-row">
 						<div className="flex-1">
