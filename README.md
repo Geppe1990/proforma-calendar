@@ -1,54 +1,22 @@
-# React + TypeScript + Vite
+# Proforma Calendar
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 1. Crea un progetto su Google Cloud Console
+   - Vai su [Google Cloud Console](https://console.cloud.google.com/)
+   - Clicca su Select a project > New Project
+   - Dai un nome al progetto e crea il progetto
 
-Currently, two official plugins are available:
+## 2. Abilita API Calendar
+   - Nel progetto appena creato, vai su API & Services > Library
+   - Cerca e abilita l’API Google Calendar API
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 3. Configura le credenziali OAuth 2.0
+   - Creare un OAuth Client ID
+   - Scegli il tipo di applicazione: Web application
+   - Inserisci gli Authorized JavaScript origins
+   - Ad esempio: http://localhost:5173 (per sviluppo locale)
+   - Cliccare su **Pubblico** e aggiungere la vostra mail in **Utenti di prova** 
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+## 4. Settaggi App 
+   - Crea le credenziali e inserisci il **Client ID** all'interno di **VITE_CLIENT_ID** dentro **.env.example**
+   - Rinominare **.env.example** in **.env**
+   - Modificare il file **settings.ts** con i propri dati 
