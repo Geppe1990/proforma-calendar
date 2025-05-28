@@ -4,9 +4,10 @@ import settings from "../../settings.ts"
 
 interface EventSummaryProps {
 	events: CalendarEvent[]
+	colorMap: Record<string, string>
 }
 
-export default function EventSummary({ events }: EventSummaryProps) {
+export default function EventSummary({ events, colorMap }: EventSummaryProps) {
 	const durations: Record<string, number> = {}
 	const titlesMap: Record<string, string> = {}
 
@@ -59,7 +60,10 @@ export default function EventSummary({ events }: EventSummaryProps) {
 								: `${mins}min`
 
 					return (
-						<li key={normalizedTitle}>
+						<li
+							key={normalizedTitle}
+							className={`p-2 rounded ${colorMap[normalizedTitle] || "bg-gray-100"}`}
+						>
 							{displayTitle}: <b>{formatted}</b>
 						</li>
 					)

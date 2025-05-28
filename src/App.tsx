@@ -7,6 +7,8 @@ import LoginButton from "./components/LoginButton"
 import EventSummary from "./components/EventSummary.tsx"
 import "./App.css"
 import settings from "../settings.ts"
+import { assignColors } from "./helpers/colors.helper.ts"
+import NavbarAlert from "./components/NavbarAlert.tsx"
 
 export interface CalendarEvent {
 	id: string
@@ -79,26 +81,31 @@ export default function App() {
 		}
 	}, [])
 
+	const titles = Array.from(new Set(events.map((e) => (e.summary || "(Senza titolo)").trim())))
+	const colorMap = assignColors(titles, settings.eventColors)
 	return (
-		<div className="max-w-3xl mx-auto">
-			{!accessToken ? (
-				<LoginButton onClick={login} />
-			) : (
-				<>
-					<h1 className={"text-3xl font-bold mb-6"}>
-						Proforma {settings.firstName} {settings.lastName}{" "}
-						{dayjs().format("MMMM YYYY")}
-					</h1>
-					<div className="flex justify-between gap-8 flex-col md:flex-row">
-						<div className="flex-1">
-							<EventsByDate events={events} />
+		<>
+			<NavbarAlert />
+			<div className="max-w-3xl mx-auto">
+				{!accessToken ? (
+					<LoginButton onClick={login} />
+				) : (
+					<>
+						<h1 className={"text-3xl font-bold mb-6"}>
+							Proforma {settings.firstName} {settings.lastName}{" "}
+							{dayjs().format("MMMM YYYY")}
+						</h1>
+						<div className="flex justify-between gap-8 flex-col md:flex-row">
+							<div className="flex-1">
+								<EventsByDate events={events} colorMap={colorMap} />
+							</div>
+							<div className="flex-1">
+								<EventSummary events={events} colorMap={colorMap} />{" "}
+							</div>
 						</div>
-						<div className="flex-1">
-							<EventSummary events={events} />
-						</div>
-					</div>
-				</>
-			)}
-		</div>
+					</>
+				)}
+			</div>
+		</>
 	)
 }

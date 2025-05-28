@@ -4,9 +4,10 @@ import type { CalendarEvent } from "../App.tsx"
 
 interface EventsByDateProps {
 	events: CalendarEvent[]
+	colorMap: Record<string, string>
 }
 
-export default function EventsByDate({ events }: EventsByDateProps) {
+export default function EventsByDate({ events, colorMap }: EventsByDateProps) {
 	const eventsByDate = events.reduce<Record<string, CalendarEvent[]>>((acc, event) => {
 		const start = dayjs(event.start.dateTime || event.start.date).format("YYYY-MM-DD")
 		if (!acc[start]) acc[start] = []
@@ -28,9 +29,18 @@ export default function EventsByDate({ events }: EventsByDateProps) {
 						{dayjs(date).format("dddd D MMMM YYYY")}
 					</h2>
 					<ul className="space-y-2">
-						{eventsByDate[date].map((event) => (
-							<EventItem key={event.id} event={event} />
-						))}
+						{eventsByDate[date].map((event) => {
+							const normalizedTitle = (event.summary || "(Senza titolo)").trim()
+							const bgColor = colorMap[normalizedTitle] || "bg-gray-100"
+							return (
+								<li
+									key={event.id}
+									className={`p-2 rounded hover:bg-gray-50 ${bgColor}`}
+								>
+									<EventItem event={event} />
+								</li>
+							)
+						})}
 					</ul>
 				</div>
 			))}

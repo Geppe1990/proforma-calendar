@@ -23,11 +23,11 @@ export default function EventItem({ event }: EventItemProps) {
 	}
 
 	return (
-		<li className="border p-4 rounded shadow-sm hover:bg-gray-50">
+		<>
 			<div className="font-medium">{event.summary || "(Senza titolo)"}</div>
 			<div className="text-sm text-gray-600">
 				{time} · Durata: {duration}
 			</div>
-		</li>
+		</>
 	)
 }
