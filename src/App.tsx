@@ -20,6 +20,7 @@ export interface CalendarEvent {
 export default function App() {
 	const [accessToken, setAccessToken] = useState<string | null>(null)
 	const [events, setEvents] = useState<CalendarEvent[]>([])
+	// TODO: INSERIRE UN PULSANTE "ESPORTA PDF"
 
 	const login = useGoogleLogin({
 		scope: "https://www.googleapis.com/auth/calendar.readonly",
