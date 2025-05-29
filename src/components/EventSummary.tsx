@@ -1,6 +1,5 @@
 import type { CalendarEvent } from "../types/CalendarEvent.ts"
 import dayjs from "dayjs"
-import settings from "../../settings.ts"
 
 interface EventSummaryProps {
 	events: CalendarEvent[]
@@ -43,7 +42,7 @@ export default function EventSummary({ events, colorMap }: EventSummaryProps) {
 		return h > 0 && m > 0 ? `${h}h ${m}min` : h > 0 ? `${h}h` : `${m}min`
 	})()
 
-	const compensoTotale = (totalHours * settings.rate).toFixed(2)
+	const compensoTotale = (totalHours * import.meta.env.VITE_CLIENT_RATE).toFixed(2)
 
 	return (
 		<div>

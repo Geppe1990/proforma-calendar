@@ -17,6 +17,5 @@
    - Cliccare su **Pubblico** e aggiungere la vostra mail in **Utenti di prova** 
 
 ## 4. Settaggi App 
-   - Crea le credenziali e inserisci il **Client ID** all'interno di **VITE_CLIENT_ID** dentro **.env.example**
+   - Crea le credenziali e inserisci il **Client ID** e gli altri dati all'interno di **VITE_CLIENT_ID** dentro **.env.example**
    - Rinominare **.env.example** in **.env**
-   - Modificare il file **settings.ts** con i propri dati 

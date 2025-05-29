@@ -1,9 +1,10 @@
-import settings from "../../settings.ts"
 import { useState } from "react"
 import { MdClose } from "react-icons/md"
 
 const NavbarAlert = () => {
-	const [opened, setOpened] = useState<boolean>(!settings.firstName && !settings.lastName)
+	const [opened, setOpened] = useState<boolean>(
+		!import.meta.env.VITE_CLIENT_FIRSTNAME && !import.meta.env.VITE_CLIENT_LASTNAME
+	)
 
 	const handleClose = () => {
 		setOpened(false)
@@ -21,7 +22,7 @@ const NavbarAlert = () => {
 		>
 			<div>
 				<b>🔥 Attenzione</b>: se è la prima volta che usi questa applicazione, modifica i
-				parametri nel file settings.json
+				parametri nel file .env
 			</div>
 			<div className={"text-white cursor-pointer"} onClick={handleClose}>
 				<MdClose />

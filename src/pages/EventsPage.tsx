@@ -2,7 +2,6 @@ import { useParams } from "react-router-dom"
 import { useGoogleEvents } from "../hooks/useGoogleEvents"
 import EventsByDate from "../components/EventsByDate"
 import { assignColors } from "../helpers/colors.helper"
-import settings from "../../settings"
 import { useContext } from "react"
 import { TokenContext } from "../contexts/TokenContext.ts"
 import { MdOutlinePrint } from "react-icons/md"
@@ -10,6 +9,7 @@ import EventSummary from "../components/EventSummary.tsx"
 import dayjs from "dayjs"
 import "dayjs/locale/it"
 import Loading from "../components/Loading.tsx"
+import { eventColors } from "../constants.ts"
 
 export default function EventsPage() {
 	const { year, month } = useParams()
@@ -37,7 +37,7 @@ export default function EventsPage() {
 	const titles = Array.from(
 		new Set(selectedEvents.map((e) => (e.summary || "(Senza titolo)").trim()))
 	)
-	const colorMap = assignColors(titles, settings.eventColors)
+	const colorMap = assignColors(titles, eventColors)
 	const formattedMonth = dayjs(`${year}-${month}-01`)
 		.locale("it")
 		.format("MMMM YYYY")
