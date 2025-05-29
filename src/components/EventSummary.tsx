@@ -15,7 +15,6 @@ export default function EventSummary({ events, colorMap }: EventSummaryProps) {
 		const rawTitle = event.summary || "(Senza titolo)"
 		const normalizedTitle = rawTitle.trim()
 
-		// Salva la versione originale solo la prima volta
 		if (!titlesMap[normalizedTitle]) {
 			titlesMap[normalizedTitle] = rawTitle
 		}
