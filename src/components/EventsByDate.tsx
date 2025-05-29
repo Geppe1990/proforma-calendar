@@ -36,7 +36,7 @@ export default function EventsByDate({ events, colorMap }: EventsByDateProps) {
 							return (
 								<li
 									key={event.id}
-									className={`p-2 rounded hover:bg-gray-50 ${bgColor} print:flex print:items-center print:p-0 print:mb-2`}
+									className={`p-2 rounded hover:bg-gray-50 ${bgColor}`}
 								>
 									<EventItem event={event} />
 								</li>

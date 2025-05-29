@@ -62,7 +62,7 @@ export default function EventSummary({ events, colorMap }: EventSummaryProps) {
 					return (
 						<li
 							key={normalizedTitle}
-							className={`p-2 rounded ${colorMap[normalizedTitle] || "bg-gray-100"} print:flex print:items-center print:p-0 print:mb-2`}
+							className={`p-2 rounded ${colorMap[normalizedTitle] || "bg-gray-100"} `}
 						>
 							{displayTitle}:&nbsp;<b>{formatted}</b>
 						</li>

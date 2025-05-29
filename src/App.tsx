@@ -88,7 +88,7 @@ export default function App() {
 		<>
 			<NavbarAlert />
 			<div
-				className="max-w-3xl mx-auto print:max-w-screen
+				className="max-w-3xl mx-auto
 "
 			>
 				{!accessToken ? (
