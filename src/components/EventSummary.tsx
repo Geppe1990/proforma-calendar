@@ -1,4 +1,4 @@
-import type { CalendarEvent } from "../App"
+import type { CalendarEvent } from "../types/CalendarEvent.ts"
 import dayjs from "dayjs"
 import settings from "../../settings.ts"
 

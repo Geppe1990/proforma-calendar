@@ -1,6 +1,6 @@
 import dayjs from "dayjs"
 import EventItem from "./EventItem"
-import type { CalendarEvent } from "../App.tsx"
+import type { CalendarEvent } from "../types/CalendarEvent.ts"
 import { MdClose } from "react-icons/md"
 
 interface EventsByDateProps {

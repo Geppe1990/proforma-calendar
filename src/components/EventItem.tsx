@@ -1,5 +1,5 @@
 import dayjs from "dayjs"
-import type { CalendarEvent } from "../App"
+import type { CalendarEvent } from "../types/CalendarEvent.ts"
 
 interface EventItemProps {
 	event: CalendarEvent
