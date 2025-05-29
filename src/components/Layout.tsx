@@ -6,6 +6,7 @@ import Login from "./Login.tsx"
 import Loading from "./Loading.tsx"
 import Header from "./Header.tsx"
 import Footer from "./Footer.tsx"
+import Navbar from "../Navbar.tsx"
 
 export default function Layout() {
 	const [token, setToken] = useState<string | null>(null)
@@ -21,6 +22,7 @@ export default function Layout() {
 		<TokenContext.Provider value={token}>
 			<div className="min-h-screen flex flex-col">
 				<Header />
+				<Navbar />
 				<main className="flex-grow container mx-auto p-4">
 					<Outlet />
 				</main>

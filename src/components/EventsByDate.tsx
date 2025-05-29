@@ -37,7 +37,7 @@ export default function EventsByDate({ events, colorMap, onRemove }: EventsByDat
 
 	return (
 		<>
-			<h2 className={"text-xl font-semibold mb-2"}>Calendario</h2>
+			<h2 className={"text-xl font-semibold mt-6 mb-2"}>Calendario</h2>
 			{sortedDates.map((date) => (
 				<div key={date} className="mb-6">
 					<h2 className="text-xl font-semibold mb-2">

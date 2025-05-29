@@ -7,6 +7,8 @@ import { useContext } from "react"
 import { TokenContext } from "../contexts/TokenContext.ts"
 import { MdOutlinePrint } from "react-icons/md"
 import EventSummary from "../components/EventSummary.tsx"
+import dayjs from "dayjs"
+import "dayjs/locale/it"
 
 export default function EventsPage() {
 	const { year, month } = useParams()
@@ -35,13 +37,15 @@ export default function EventsPage() {
 		new Set(selectedEvents.map((e) => (e.summary || "(Senza titolo)").trim()))
 	)
 	const colorMap = assignColors(titles, settings.eventColors)
+	const formattedMonth = dayjs(`${year}-${month}-01`)
+		.locale("it")
+		.format("MMMM YYYY")
+		.replace(/^\w/, (c: string) => c.toUpperCase())
 
 	return (
 		<>
 			<div className="max-w-3xl mx-auto mt-6">
-				<h1 className="text-2xl font-bold mb-4">
-					Eventi per {month}/{year}
-				</h1>
+				<h1 className="text-2xl font-bold mb-4">Eventi per {formattedMonth}</h1>
 				<EventSummary events={events} colorMap={colorMap} />
 				<EventsByDate
 					events={selectedEvents}
