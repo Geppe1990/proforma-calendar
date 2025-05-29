@@ -1,4 +1,7 @@
 import dayjs from "dayjs"
+import "dayjs/locale/it"
+dayjs.locale("it")
+
 import EventItem from "./EventItem"
 import type { CalendarEvent } from "../types/CalendarEvent.ts"
 import { MdClose } from "react-icons/md"
@@ -8,6 +11,7 @@ interface EventsByDateProps {
 	colorMap: Record<string, string>
 	onRemove: (id: string) => void
 }
+
 export default function EventsByDate({ events, colorMap, onRemove }: EventsByDateProps) {
 	const eventsByDate = events.reduce<Record<string, CalendarEvent[]>>((acc, event) => {
 		const start = dayjs(event.start.dateTime || event.start.date).format("YYYY-MM-DD")
@@ -22,13 +26,22 @@ export default function EventsByDate({ events, colorMap, onRemove }: EventsByDat
 		return <p>Nessun evento trovato per questo mese.</p>
 	}
 
+	function capitalizeFirstLetter(str: string) {
+		const parts = str.split(" ")
+		if (parts.length >= 3) {
+			parts[0] = parts[0][0].toUpperCase() + parts[0].slice(1)
+			parts[2] = parts[2][0].toUpperCase() + parts[2].slice(1)
+		}
+		return parts.join(" ")
+	}
+
 	return (
 		<>
 			<h2 className={"text-xl font-semibold mb-2"}>Calendario</h2>
 			{sortedDates.map((date) => (
 				<div key={date} className="mb-6">
 					<h2 className="text-xl font-semibold mb-2">
-						{dayjs(date).format("dddd D MMMM YYYY")}
+						{capitalizeFirstLetter(dayjs(date).format("dddd D MMMM YYYY"))}
 					</h2>
 					<ul className="space-y-2">
 						{eventsByDate[date].map((event) => {
@@ -37,10 +50,8 @@ export default function EventsByDate({ events, colorMap, onRemove }: EventsByDat
 							return (
 								<li
 									key={event.id}
-									style={{
-										backgroundColor: bgColor,
-									}}
-									className={`p-2 rounded hover:bg-gray-50 flex justify-between`}
+									style={{ backgroundColor: bgColor }}
+									className="p-2 rounded hover:bg-gray-50 flex justify-between"
 								>
 									<EventItem event={event} />
 									<button

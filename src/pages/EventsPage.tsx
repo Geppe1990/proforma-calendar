@@ -6,11 +6,19 @@ import settings from "../../settings"
 import { useContext } from "react"
 import { TokenContext } from "../contexts/TokenContext.ts"
 import { MdOutlinePrint } from "react-icons/md"
+import EventSummary from "../components/EventSummary.tsx"
 
 export default function EventsPage() {
 	const { year, month } = useParams()
+	const parsedYear = Number(year)
+	const parsedMonth = Number(month)
 	const token = useContext(TokenContext)
-	const { events, isLoading: eventsLoading, removeEventFromView } = useGoogleEvents(token)
+
+	const {
+		events,
+		isLoading: eventsLoading,
+		removeEventFromView,
+	} = useGoogleEvents(token, parsedYear, parsedMonth)
 
 	if (eventsLoading) {
 		return <div>Caricamento in corso...</div>
@@ -20,7 +28,7 @@ export default function EventsPage() {
 		const rawDate = e.start.dateTime ?? e.start.date
 		if (!rawDate) return false
 		const date = new Date(rawDate)
-		return date.getFullYear() === Number(year) && date.getMonth() + 1 === Number(month)
+		return date.getFullYear() === parsedYear && date.getMonth() + 1 === parsedMonth
 	})
 
 	const titles = Array.from(
@@ -34,6 +42,7 @@ export default function EventsPage() {
 				<h1 className="text-2xl font-bold mb-4">
 					Eventi per {month}/{year}
 				</h1>
+				<EventSummary events={events} colorMap={colorMap} />
 				<EventsByDate
 					events={selectedEvents}
 					colorMap={colorMap}
