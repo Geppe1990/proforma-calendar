@@ -35,7 +35,7 @@ export function useGoogleAuth(onTokenReady: (token: string) => void) {
 		} else {
 			setIsLoading(false)
 		}
-	}, [])
+	}, [onTokenReady])
 
 	return { accessToken, isLoading, login }
 }

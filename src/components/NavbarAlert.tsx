@@ -16,7 +16,7 @@ const NavbarAlert = () => {
 	return (
 		<div
 			className={
-				"bg-red-600 text-white text-left p-2 mb-4 text-sm flex justify-between items-center"
+				"bg-red-600 text-white text-left p-2 text-sm flex justify-between items-center"
 			}
 		>
 			<div>

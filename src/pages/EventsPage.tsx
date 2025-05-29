@@ -9,6 +9,7 @@ import { MdOutlinePrint } from "react-icons/md"
 import EventSummary from "../components/EventSummary.tsx"
 import dayjs from "dayjs"
 import "dayjs/locale/it"
+import Loading from "../components/Loading.tsx"
 
 export default function EventsPage() {
 	const { year, month } = useParams()
@@ -23,7 +24,7 @@ export default function EventsPage() {
 	} = useGoogleEvents(token, parsedYear, parsedMonth)
 
 	if (eventsLoading) {
-		return <div>Caricamento in corso...</div>
+		return <Loading />
 	}
 
 	const selectedEvents = events.filter((e) => {
@@ -46,12 +47,14 @@ export default function EventsPage() {
 		<>
 			<div className="max-w-3xl mx-auto mt-6">
 				<h1 className="text-2xl font-bold mb-4">Eventi per {formattedMonth}</h1>
-				<EventSummary events={events} colorMap={colorMap} />
-				<EventsByDate
-					events={selectedEvents}
-					colorMap={colorMap}
-					onRemove={removeEventFromView}
-				/>
+				<>
+					<EventSummary events={events} colorMap={colorMap} />
+					<EventsByDate
+						events={selectedEvents}
+						colorMap={colorMap}
+						onRemove={removeEventFromView}
+					/>
+				</>
 			</div>
 			<div className="fixed bottom-4 right-4 print:hidden">
 				<button

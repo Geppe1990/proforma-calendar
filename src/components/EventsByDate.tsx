@@ -5,6 +5,7 @@ dayjs.locale("it")
 import EventItem from "./EventItem"
 import type { CalendarEvent } from "../types/CalendarEvent.ts"
 import { MdClose } from "react-icons/md"
+import { capitalizeFirstLetter } from "../helpers/capitalize.helper.ts"
 
 interface EventsByDateProps {
 	events: CalendarEvent[]
@@ -21,20 +22,6 @@ export default function EventsByDate({ events, colorMap, onRemove }: EventsByDat
 	}, {})
 
 	const sortedDates = Object.keys(eventsByDate).sort()
-
-	if (sortedDates.length === 0) {
-		return <p>Nessun evento trovato per questo mese.</p>
-	}
-
-	function capitalizeFirstLetter(str: string) {
-		const parts = str.split(" ")
-		if (parts.length >= 3) {
-			parts[0] = parts[0][0].toUpperCase() + parts[0].slice(1)
-			parts[2] = parts[2][0].toUpperCase() + parts[2].slice(1)
-		}
-		return parts.join(" ")
-	}
-
 	return (
 		<>
 			<h2 className={"text-xl font-semibold mt-6 mb-2"}>Calendario</h2>
@@ -46,7 +33,7 @@ export default function EventsByDate({ events, colorMap, onRemove }: EventsByDat
 					<ul className="space-y-2">
 						{eventsByDate[date].map((event) => {
 							const normalizedTitle = (event.summary || "(Senza titolo)").trim()
-							const bgColor = colorMap[normalizedTitle] || "#000000"
+							const bgColor = colorMap[normalizedTitle]
 							return (
 								<li
 									key={event.id}

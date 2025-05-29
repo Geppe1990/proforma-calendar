@@ -11,6 +11,8 @@ export default function EventSummary({ events, colorMap }: EventSummaryProps) {
 	const durations: Record<string, number> = {}
 	const titlesMap: Record<string, string> = {}
 
+	if (!events) return <></>
+
 	events.forEach((event) => {
 		const rawTitle = event.summary || "(Senza titolo)"
 		const normalizedTitle = rawTitle.trim()
@@ -31,7 +33,7 @@ export default function EventSummary({ events, colorMap }: EventSummaryProps) {
 	})
 
 	const summaries = Object.entries(durations)
-	if (summaries.length === 0) return null
+	if (summaries.length === 0) return <></>
 
 	const totalMinutes = summaries.reduce((acc, [, min]) => acc + min, 0)
 	const totalHours = totalMinutes / 60
@@ -57,7 +59,7 @@ export default function EventSummary({ events, colorMap }: EventSummaryProps) {
 							: hours > 0
 								? `${hours}h`
 								: `${mins}min`
-					const bgColor = colorMap[normalizedTitle] || "#000000"
+					const bgColor = colorMap[normalizedTitle]
 					return (
 						<li
 							key={normalizedTitle}

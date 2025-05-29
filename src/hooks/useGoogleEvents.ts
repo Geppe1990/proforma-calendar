@@ -2,11 +2,7 @@ import { useEffect, useState } from "react"
 import dayjs from "dayjs"
 import type { CalendarEvent } from "../types/CalendarEvent"
 
-export function useGoogleEvents(
-	token: string | null,
-	year: number | undefined,
-	month: number | undefined
-) {
+export function useGoogleEvents(token: string | null, year: number, month: number) {
 	const [events, setEvents] = useState<CalendarEvent[]>([])
 	const [isLoading, setIsLoading] = useState(true)
 
@@ -42,6 +38,11 @@ export function useGoogleEvents(
 			fetchEvents(token, year, month).finally(() => setIsLoading(false))
 		} else {
 			setIsLoading(false)
+		}
+
+		return () => {
+			setEvents([])
+			setIsLoading(true)
 		}
 	}, [token, year, month])
 
