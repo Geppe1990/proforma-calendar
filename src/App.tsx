@@ -88,6 +88,19 @@ export default function App() {
 		setEvents((prev) => prev.filter((e) => e.id !== eventId))
 	}
 
+	if (!accessToken) {
+		return (
+			<div className="flex flex-col items-center justify-center mt-20 text-center space-y-6">
+				<h1 className="text-4xl font-bold">Benvenuto!</h1>
+				<p className="text-lg text-gray-600 max-w-md">
+					Accedi con Google per generare automaticamente un proforma basata sui tuoi
+					eventi del calendario.
+				</p>
+				<LoginButton onClick={login} />
+			</div>
+		)
+	}
+
 	return (
 		<>
 			<NavbarAlert />
@@ -95,26 +108,22 @@ export default function App() {
 				className="max-w-3xl mx-auto
 "
 			>
-				{!accessToken ? (
-					<LoginButton onClick={login} />
-				) : (
-					<>
-						<h1 className={"text-3xl font-bold mb-6"}>
-							Proforma {settings.firstName} {settings.lastName}{" "}
-							{dayjs().format("MMMM YYYY")}
-						</h1>
-						<div className="w-full">
-							<EventSummary events={events} colorMap={colorMap} />
-						</div>
-						<div className="w-full mt-6">
-							<EventsByDate
-								events={events}
-								colorMap={colorMap}
-								onRemove={removeEventFromView}
-							/>
-						</div>
-					</>
-				)}
+				<>
+					<h1 className="text-3xl font-bold mb-6">
+						Proforma {settings.firstName} {settings.lastName}{" "}
+						{dayjs().format("MMMM YYYY")}
+					</h1>
+					<div className="w-full">
+						<EventSummary events={events} colorMap={colorMap} />
+					</div>
+					<div className="w-full mt-6">
+						<EventsByDate
+							events={events}
+							colorMap={colorMap}
+							onRemove={removeEventFromView}
+						/>
+					</div>
+				</>
 				<div className={"fixed bottom-4 right-4"}>
 					<button
 						className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-lg cursor-pointer"
