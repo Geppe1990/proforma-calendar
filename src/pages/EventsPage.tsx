@@ -5,6 +5,7 @@ import { assignColors } from "../helpers/colors.helper"
 import settings from "../../settings"
 import { useContext } from "react"
 import { TokenContext } from "../contexts/TokenContext.ts"
+import { MdOutlinePrint } from "react-icons/md"
 
 export default function EventsPage() {
 	const { year, month } = useParams()
@@ -28,15 +29,25 @@ export default function EventsPage() {
 	const colorMap = assignColors(titles, settings.eventColors)
 
 	return (
-		<div className="max-w-3xl mx-auto mt-6">
-			<h1 className="text-2xl font-bold mb-4">
-				Eventi per {month}/{year}
-			</h1>
-			<EventsByDate
-				events={selectedEvents}
-				colorMap={colorMap}
-				onRemove={removeEventFromView}
-			/>
-		</div>
+		<>
+			<div className="max-w-3xl mx-auto mt-6">
+				<h1 className="text-2xl font-bold mb-4">
+					Eventi per {month}/{year}
+				</h1>
+				<EventsByDate
+					events={selectedEvents}
+					colorMap={colorMap}
+					onRemove={removeEventFromView}
+				/>
+			</div>
+			<div className="fixed bottom-4 right-4 print:hidden">
+				<button
+					className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-lg cursor-pointer"
+					onClick={() => window.print()}
+				>
+					<MdOutlinePrint />
+				</button>
+			</div>
+		</>
 	)
 }
