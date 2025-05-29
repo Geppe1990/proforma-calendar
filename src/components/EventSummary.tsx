@@ -58,11 +58,14 @@ export default function EventSummary({ events, colorMap }: EventSummaryProps) {
 							: hours > 0
 								? `${hours}h`
 								: `${mins}min`
-
+					const bgColor = colorMap[normalizedTitle] || "#000000"
 					return (
 						<li
 							key={normalizedTitle}
-							className={`p-2 rounded ${colorMap[normalizedTitle] || "bg-gray-100"} `}
+							style={{
+								backgroundColor: bgColor,
+							}}
+							className={`p-2 rounded`}
 						>
 							{displayTitle}:&nbsp;<b>{formatted}</b>
 						</li>

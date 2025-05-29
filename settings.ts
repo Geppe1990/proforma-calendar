@@ -2,15 +2,7 @@ const settings = {
 	firstName: "Giuseppe",
 	lastName: "Vigneri",
 	rate: 30,
-	eventColors: [
-		"bg-yellow-100",
-		"bg-green-100",
-		"bg-blue-100",
-		"bg-red-100",
-		"bg-purple-100",
-		"bg-pink-100",
-		"bg-indigo-100",
-	],
+	eventColors: ["#fef9c3", "#dcfce7", "#dbeafe", "#fee2e2", "#f3e8ff", "#fce7f3", "#e0e7ff"],
 }
 
 export default settings

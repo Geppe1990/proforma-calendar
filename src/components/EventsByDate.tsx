@@ -33,11 +33,14 @@ export default function EventsByDate({ events, colorMap, onRemove }: EventsByDat
 					<ul className="space-y-2">
 						{eventsByDate[date].map((event) => {
 							const normalizedTitle = (event.summary || "(Senza titolo)").trim()
-							const bgColor = colorMap[normalizedTitle] || "bg-gray-100"
+							const bgColor = colorMap[normalizedTitle] || "#000000"
 							return (
 								<li
 									key={event.id}
-									className={`p-2 rounded hover:bg-gray-50 flex justify-between ${bgColor}`}
+									style={{
+										backgroundColor: bgColor,
+									}}
+									className={`p-2 rounded hover:bg-gray-50 flex justify-between`}
 								>
 									<EventItem event={event} />
 									<button

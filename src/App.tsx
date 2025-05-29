@@ -1,5 +1,4 @@
-import "./App.css"
-import { useGoogleCalendar } from "./hooks/useGoogleCalendar"
+import { useGoogleEvents } from "./hooks/useGoogleEvents.ts"
 import EventsByDate from "./components/EventsByDate"
 import LoginButton from "./components/LoginButton"
 import EventSummary from "./components/EventSummary"
@@ -9,14 +8,18 @@ import dayjs from "dayjs"
 import "dayjs/locale/it"
 import settings from "../settings.ts"
 import { assignColors } from "./helpers/colors.helper"
+import { useState } from "react"
+import { useGoogleAuth } from "./hooks/useGoogleAuth.ts"
+import "./App.css"
 
 dayjs.locale("it")
 
 export default function App() {
-	const { accessToken, isLoading, events, login, removeEventFromView } = useGoogleCalendar()
+	const [token, setToken] = useState<string | null>(null)
+	const { accessToken, isLoading: authLoading, login } = useGoogleAuth(setToken)
+	const { events, isLoading: eventsLoading, removeEventFromView } = useGoogleEvents(token)
 
-	const titles = Array.from(new Set(events.map((e) => (e.summary || "(Senza titolo)").trim())))
-	const colorMap = assignColors(titles, settings.eventColors)
+	const isLoading = authLoading || eventsLoading
 
 	if (isLoading) {
 		return (
@@ -39,6 +42,9 @@ export default function App() {
 		)
 	}
 
+	const titles = Array.from(new Set(events.map((e) => (e.summary || "(Senza titolo)").trim())))
+	const colorMap = assignColors(titles, settings.eventColors)
+	console.log("colorMap", colorMap)
 	return (
 		<>
 			<NavbarAlert />
