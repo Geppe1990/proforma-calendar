@@ -1,6 +1,7 @@
 import dayjs from "dayjs"
 import EventItem from "./EventItem"
 import type { CalendarEvent } from "../App.tsx"
+import { MdClose } from "react-icons/md"
 
 interface EventsByDateProps {
 	events: CalendarEvent[]
@@ -43,7 +44,7 @@ export default function EventsByDate({ events, colorMap, onRemove }: EventsByDat
 										onClick={() => onRemove(event.id)}
 										className="text-sm text-red-600 hover:text-red-800 cursor-pointer print:hidden"
 									>
-										Elimina
+										<MdClose />
 									</button>
 								</li>
 							)

@@ -21,6 +21,7 @@ export interface CalendarEvent {
 export default function App() {
 	const [accessToken, setAccessToken] = useState<string | null>(null)
 	const [events, setEvents] = useState<CalendarEvent[]>([])
+	const [isLoading, setIsLoading] = useState(true)
 
 	const login = useGoogleLogin({
 		scope: "https://www.googleapis.com/auth/calendar.readonly",
@@ -50,7 +51,6 @@ export default function App() {
 			)
 
 			if (res.status === 401) {
-				// Token non valido o scaduto
 				console.warn("Token non valido. Rimuovo e richiedo login.")
 				localStorage.removeItem("google_token")
 				setAccessToken(null)
@@ -78,6 +78,11 @@ export default function App() {
 					localStorage.removeItem("google_token")
 					setAccessToken(null)
 				})
+				.finally(() => {
+					setIsLoading(false)
+				})
+		} else {
+			setIsLoading(false)
 		}
 	}, [])
 
@@ -86,6 +91,14 @@ export default function App() {
 
 	const removeEventFromView = (eventId: string) => {
 		setEvents((prev) => prev.filter((e) => e.id !== eventId))
+	}
+
+	if (isLoading) {
+		return (
+			<div className="flex flex-col items-center justify-center mt-20 text-center space-y-6">
+				<p className="text-lg text-gray-600">Caricamento in corso...</p>
+			</div>
+		)
 	}
 
 	if (!accessToken) {
