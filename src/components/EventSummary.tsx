@@ -45,7 +45,7 @@ export default function EventSummary({ events, colorMap }: EventSummaryProps) {
 	const compensoTotale = (totalHours * settings.rate).toFixed(2)
 
 	return (
-		<div className="mt-8">
+		<div>
 			<h2 className="text-xl font-semibold mb-2">Tempo totale per evento</h2>
 			<ul className="space-y-1 text-gray-800">
 				{summaries.map(([normalizedTitle, minutes]) => {

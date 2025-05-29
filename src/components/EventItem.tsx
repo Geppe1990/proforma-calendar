@@ -25,7 +25,7 @@ export default function EventItem({ event }: EventItemProps) {
 	return (
 		<>
 			<div className="font-medium">{event.summary || "(Senza titolo)"}</div>
-			<div className="text-sm text-gray-600">
+			<div className="text-sm text-gray-600 print:ml-2">
 				{time} · Durata: {duration}
 			</div>
 		</>

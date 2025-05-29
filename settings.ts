@@ -1,7 +1,7 @@
 const settings = {
-	firstName: "",
-	lastName: "",
-	rate: 0,
+	firstName: "Giuseppe",
+	lastName: "Vigneri",
+	rate: 30,
 	eventColors: [
 		"bg-yellow-100",
 		"bg-green-100",

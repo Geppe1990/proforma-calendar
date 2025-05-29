@@ -9,6 +9,7 @@ import "./App.css"
 import settings from "../settings.ts"
 import { assignColors } from "./helpers/colors.helper.ts"
 import NavbarAlert from "./components/NavbarAlert.tsx"
+import { MdOutlinePrint } from "react-icons/md"
 
 export interface CalendarEvent {
 	id: string
@@ -20,7 +21,6 @@ export interface CalendarEvent {
 export default function App() {
 	const [accessToken, setAccessToken] = useState<string | null>(null)
 	const [events, setEvents] = useState<CalendarEvent[]>([])
-	// TODO: INSERIRE UN PULSANTE "ESPORTA PDF"
 
 	const login = useGoogleLogin({
 		scope: "https://www.googleapis.com/auth/calendar.readonly",
@@ -84,10 +84,14 @@ export default function App() {
 
 	const titles = Array.from(new Set(events.map((e) => (e.summary || "(Senza titolo)").trim())))
 	const colorMap = assignColors(titles, settings.eventColors)
+
 	return (
 		<>
 			<NavbarAlert />
-			<div className="max-w-3xl mx-auto">
+			<div
+				className="max-w-3xl mx-auto print:max-w-screen
+"
+			>
 				{!accessToken ? (
 					<LoginButton onClick={login} />
 				) : (
@@ -97,15 +101,23 @@ export default function App() {
 							{dayjs().format("MMMM YYYY")}
 						</h1>
 						<div className="flex justify-between gap-8 flex-col md:flex-row">
-							<div className="flex-1">
+							<div className="w-1/2">
 								<EventsByDate events={events} colorMap={colorMap} />
 							</div>
-							<div className="flex-1">
+							<div className="w-1/2">
 								<EventSummary events={events} colorMap={colorMap} />{" "}
 							</div>
 						</div>
 					</>
 				)}
+				<div className={"fixed bottom-4 right-4"}>
+					<button
+						className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-lg cursor-pointer"
+						onClick={() => window.print()}
+					>
+						<MdOutlinePrint />
+					</button>
+				</div>
 			</div>
 		</>
 	)
