@@ -84,6 +84,10 @@ export default function App() {
 	const titles = Array.from(new Set(events.map((e) => (e.summary || "(Senza titolo)").trim())))
 	const colorMap = assignColors(titles, settings.eventColors)
 
+	const removeEventFromView = (eventId: string) => {
+		setEvents((prev) => prev.filter((e) => e.id !== eventId))
+	}
+
 	return (
 		<>
 			<NavbarAlert />
@@ -103,7 +107,11 @@ export default function App() {
 							<EventSummary events={events} colorMap={colorMap} />
 						</div>
 						<div className="w-full mt-6">
-							<EventsByDate events={events} colorMap={colorMap} />
+							<EventsByDate
+								events={events}
+								colorMap={colorMap}
+								onRemove={removeEventFromView}
+							/>
 						</div>
 					</>
 				)}

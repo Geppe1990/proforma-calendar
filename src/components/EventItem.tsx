@@ -23,11 +23,11 @@ export default function EventItem({ event }: EventItemProps) {
 	}
 
 	return (
-		<>
+		<div>
 			<div className="font-medium">{event.summary || "(Senza titolo)"}</div>
 			<div className="text-sm text-gray-600">
 				{time} · Durata: {duration}
 			</div>
-		</>
+		</div>
 	)
 }

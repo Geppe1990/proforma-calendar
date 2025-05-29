@@ -5,9 +5,9 @@ import type { CalendarEvent } from "../App.tsx"
 interface EventsByDateProps {
 	events: CalendarEvent[]
 	colorMap: Record<string, string>
+	onRemove: (id: string) => void
 }
-
-export default function EventsByDate({ events, colorMap }: EventsByDateProps) {
+export default function EventsByDate({ events, colorMap, onRemove }: EventsByDateProps) {
 	const eventsByDate = events.reduce<Record<string, CalendarEvent[]>>((acc, event) => {
 		const start = dayjs(event.start.dateTime || event.start.date).format("YYYY-MM-DD")
 		if (!acc[start]) acc[start] = []
@@ -36,9 +36,15 @@ export default function EventsByDate({ events, colorMap }: EventsByDateProps) {
 							return (
 								<li
 									key={event.id}
-									className={`p-2 rounded hover:bg-gray-50 ${bgColor}`}
+									className={`p-2 rounded hover:bg-gray-50 flex justify-between ${bgColor}`}
 								>
 									<EventItem event={event} />
+									<button
+										onClick={() => onRemove(event.id)}
+										className="text-sm text-red-600 hover:text-red-800 cursor-pointer print:hidden"
+									>
+										Elimina
+									</button>
 								</li>
 							)
 						})}
