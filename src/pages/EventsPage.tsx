@@ -1,0 +1,42 @@
+import { useParams } from "react-router-dom"
+import { useGoogleEvents } from "../hooks/useGoogleEvents"
+import EventsByDate from "../components/EventsByDate"
+import { assignColors } from "../helpers/colors.helper"
+import settings from "../../settings"
+import { useContext } from "react"
+import { TokenContext } from "../contexts/TokenContext.ts"
+
+export default function EventsPage() {
+	const { year, month } = useParams()
+	const token = useContext(TokenContext)
+	const { events, isLoading: eventsLoading, removeEventFromView } = useGoogleEvents(token)
+
+	if (eventsLoading) {
+		return <div>Caricamento in corso...</div>
+	}
+
+	const selectedEvents = events.filter((e) => {
+		const rawDate = e.start.dateTime ?? e.start.date
+		if (!rawDate) return false
+		const date = new Date(rawDate)
+		return date.getFullYear() === Number(year) && date.getMonth() + 1 === Number(month)
+	})
+
+	const titles = Array.from(
+		new Set(selectedEvents.map((e) => (e.summary || "(Senza titolo)").trim()))
+	)
+	const colorMap = assignColors(titles, settings.eventColors)
+
+	return (
+		<div className="max-w-3xl mx-auto mt-6">
+			<h1 className="text-2xl font-bold mb-4">
+				Eventi per {month}/{year}
+			</h1>
+			<EventsByDate
+				events={selectedEvents}
+				colorMap={colorMap}
+				onRemove={removeEventFromView}
+			/>
+		</div>
+	)
+}
