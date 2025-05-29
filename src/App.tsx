@@ -68,12 +68,11 @@ export default function App() {
 	useEffect(() => {
 		const token = localStorage.getItem("google_token")
 		if (token) {
-			// Verifica validità del token
 			fetch(`https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${token}`)
 				.then((res) => {
 					if (!res.ok) throw new Error("Token scaduto")
 					setAccessToken(token)
-					fetchEvents(token)
+					return fetchEvents(token)
 				})
 				.catch(() => {
 					localStorage.removeItem("google_token")
@@ -100,13 +99,11 @@ export default function App() {
 							Proforma {settings.firstName} {settings.lastName}{" "}
 							{dayjs().format("MMMM YYYY")}
 						</h1>
-						<div className="flex justify-between gap-8 flex-col md:flex-row">
-							<div className="w-1/2">
-								<EventsByDate events={events} colorMap={colorMap} />
-							</div>
-							<div className="w-1/2">
-								<EventSummary events={events} colorMap={colorMap} />{" "}
-							</div>
+						<div className="w-full">
+							<EventSummary events={events} colorMap={colorMap} />
+						</div>
+						<div className="w-full mt-6">
+							<EventsByDate events={events} colorMap={colorMap} />
 						</div>
 					</>
 				)}

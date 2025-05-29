@@ -23,6 +23,7 @@ export default function EventsByDate({ events, colorMap }: EventsByDateProps) {
 
 	return (
 		<>
+			<h2 className={"text-xl font-semibold mb-2"}>Calendario</h2>
 			{sortedDates.map((date) => (
 				<div key={date} className="mb-6">
 					<h2 className="text-xl font-semibold mb-2">

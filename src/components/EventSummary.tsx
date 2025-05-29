@@ -62,16 +62,16 @@ export default function EventSummary({ events, colorMap }: EventSummaryProps) {
 					return (
 						<li
 							key={normalizedTitle}
-							className={`p-2 rounded ${colorMap[normalizedTitle] || "bg-gray-100"}`}
+							className={`p-2 rounded ${colorMap[normalizedTitle] || "bg-gray-100"} print:flex print:items-center print:p-0 print:mb-2`}
 						>
-							{displayTitle}: <b>{formatted}</b>
+							{displayTitle}:&nbsp;<b>{formatted}</b>
 						</li>
 					)
 				})}
 				<li className="mt-4 font-semibold text-black border-t pt-2">
 					Totale ore: <b>{totalFormatted}</b>
 				</li>
-				<li className="text-black">
+				<li className="text-black border-b pb-2">
 					Compenso: <b>{compensoTotale} €</b>
 				</li>
 			</ul>
