@@ -46,15 +46,25 @@ export default function EventsPage() {
 	return (
 		<>
 			<div className="max-w-3xl mx-auto mt-6">
-				<h1 className="text-2xl font-bold mb-4">Eventi per {formattedMonth}</h1>
-				<>
-					<EventSummary events={events} colorMap={colorMap} />
-					<EventsByDate
-						events={selectedEvents}
-						colorMap={colorMap}
-						onRemove={removeEventFromView}
-					/>
-				</>
+				{events.length === 0 ? (
+					<div>
+						<h1 className="text-2xl font-bold mb-4">
+							Nessun evento per {formattedMonth}
+						</h1>
+					</div>
+				) : (
+					<>
+						<h1 className="text-2xl font-bold mb-4">Eventi per {formattedMonth}</h1>
+						<>
+							<EventSummary events={events} colorMap={colorMap} />
+							<EventsByDate
+								events={selectedEvents}
+								colorMap={colorMap}
+								onRemove={removeEventFromView}
+							/>
+						</>
+					</>
+				)}
 			</div>
 			<div className="fixed bottom-4 right-4 print:hidden">
 				<button
