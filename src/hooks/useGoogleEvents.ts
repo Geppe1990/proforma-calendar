@@ -4,29 +4,28 @@ import type { CalendarEvent } from "../types/CalendarEvent"
 
 const STORAGE_KEY = "hiddenEvents"
 
+function getHiddenEvents(): Record<string, { year: string; month: string }> {
+	const raw = localStorage.getItem(STORAGE_KEY)
+	return raw ? JSON.parse(raw) : {}
+}
+
+function saveHiddenEvents(data: Record<string, { year: string; month: string }>) {
+	localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+}
+
 export function useGoogleEvents(token: string | null, year: number, month: number) {
 	const [events, setEvents] = useState<CalendarEvent[]>([])
 	const [isLoading, setIsLoading] = useState(true)
 
-	const getHiddenEventIds = (): string[] => {
-		const data = localStorage.getItem(STORAGE_KEY)
-		return data ? JSON.parse(data) : []
-	}
-
-	const addHiddenEventId = (id: string) => {
-		const current = getHiddenEventIds()
-		const updated = [...new Set([...current, id])]
-		localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
-	}
+	const monthStr = String(month).padStart(2, "0")
+	const yearStr = String(year)
 
 	useEffect(() => {
-		const fetchEvents = async (token: string, year: number, month: number) => {
-			const start = dayjs(`${year}-${String(month).padStart(2, "0")}-01`)
-				.startOf("month")
-				.toISOString()
-			const end = dayjs(`${year}-${String(month).padStart(2, "0")}-01`)
-				.endOf("month")
-				.toISOString()
+		const fetchEvents = async () => {
+			if (!token || !year || !month) return
+
+			const start = dayjs(`${yearStr}-${monthStr}-01`).startOf("month").toISOString()
+			const end = dayjs(`${yearStr}-${monthStr}-01`).endOf("month").toISOString()
 
 			try {
 				const res = await fetch(
@@ -37,35 +36,65 @@ export function useGoogleEvents(token: string | null, year: number, month: numbe
 				if (res.status === 401) {
 					console.warn("Token non valido.")
 					localStorage.removeItem("google_token")
-					return setEvents([])
+					setEvents([])
+					return
 				}
 
 				const data = await res.json()
-				const hiddenIds = getHiddenEventIds()
-				const visibleEvents = (data.items || []).filter(
-					(event: CalendarEvent) => !hiddenIds.includes(event.id)
-				)
+				const hidden = getHiddenEvents()
+				const visibleEvents = (data.items || []).filter((event: CalendarEvent) => {
+					const startTime = event.start?.dateTime ?? event.start?.date
+					if (!event.id || !startTime) return true
+					const key = `${event.id}_${startTime.replaceAll(":", "").replaceAll("-", "")}`
+					const hiddenEntry = hidden[key]
+					return !(
+						hiddenEntry &&
+						hiddenEntry.year === yearStr &&
+						hiddenEntry.month === monthStr
+					)
+				})
+
 				setEvents(visibleEvents)
 			} catch (error) {
 				console.error("Errore nel recupero eventi:", error)
+			} finally {
+				setIsLoading(false)
 			}
 		}
-		if (token && year && month) {
-			fetchEvents(token, year, month).finally(() => setIsLoading(false))
-		} else {
-			setIsLoading(false)
-		}
+
+		setIsLoading(true)
+		fetchEvents().then((r) => console.log(r))
 
 		return () => {
 			setEvents([])
 			setIsLoading(true)
 		}
-	}, [token, year, month])
+	}, [monthStr, yearStr, token, year, month])
 
-	const removeEventFromView = (id: string) => {
-		addHiddenEventId(id)
-		setEvents((prev) => prev.filter((e) => e.id !== id))
+	const removeEventFromView = (event: CalendarEvent) => {
+		const hidden = getHiddenEvents()
+		const startTime = event.start?.dateTime ?? event.start?.date
+		if (!event.id || !startTime) return
+		const key = `${event.id}_${startTime.replaceAll(":", "").replaceAll("-", "")}`
+
+		hidden[key] = { year: yearStr, month: monthStr }
+		saveHiddenEvents(hidden)
+		setEvents((prev) =>
+			prev.filter(
+				(e) => e.id !== event.id || (e.start?.dateTime ?? e.start?.date) !== startTime
+			)
+		)
 	}
 
-	return { events, isLoading, removeEventFromView }
+	const restoreHiddenEvents = () => {
+		const hidden = getHiddenEvents()
+		const updated = Object.fromEntries(
+			Object.entries(hidden).filter(
+				([, meta]) => meta.year !== yearStr || meta.month !== monthStr
+			)
+		)
+		saveHiddenEvents(updated)
+	}
+
+	return { events, isLoading, removeEventFromView, restoreHiddenEvents }
 }

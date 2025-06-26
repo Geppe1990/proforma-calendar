@@ -31,6 +31,7 @@ export default function EventsPage() {
 		events,
 		isLoading: eventsLoading,
 		removeEventFromView,
+		restoreHiddenEvents,
 	} = useGoogleEvents(token, parsedYear, parsedMonth)
 
 	if (eventsLoading) {
@@ -53,26 +54,20 @@ export default function EventsPage() {
 		<>
 			<div className="max-w-3xl mx-auto mt-6">
 				{events.length === 0 ? (
-					<div>
-						<h1 className="text-2xl font-bold mb-4">
-							Nessun evento per {formattedMonth}
-						</h1>
-					</div>
+					<h1 className="text-2xl font-bold mb-4">Nessun evento per {formattedMonth}</h1>
 				) : (
 					<>
-						<div className={"flex justify-between mb-4"}>
-							<h1 className="text-3xl font-bold ">Eventi {formattedMonth}</h1>
-							<RestoreHiddenEventsButton />
+						<div className="flex justify-between mb-4">
+							<h1 className="text-3xl font-bold">Eventi {formattedMonth}</h1>
+							<RestoreHiddenEventsButton onRestore={restoreHiddenEvents} />
 						</div>
 						<OverlappingEvents events={selectedEvents} />
-						<>
-							<EventSummary events={events} colorMap={colorMap} />
-							<EventsByDate
-								events={selectedEvents}
-								colorMap={colorMap}
-								onRemove={removeEventFromView}
-							/>
-						</>
+						<EventSummary events={events} colorMap={colorMap} />
+						<EventsByDate
+							events={selectedEvents}
+							colorMap={colorMap}
+							onRemove={removeEventFromView}
+						/>
 					</>
 				)}
 			</div>

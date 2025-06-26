@@ -10,7 +10,7 @@ import { capitalizeFirstLetter } from "../helpers/capitalize.helper.ts"
 interface EventsByDateProps {
 	events: CalendarEvent[]
 	colorMap: Record<string, string>
-	onRemove: (id: string) => void
+	onRemove: (event: CalendarEvent) => void
 }
 
 export default function EventsByDate({ events, colorMap, onRemove }: EventsByDateProps) {
@@ -33,17 +33,17 @@ export default function EventsByDate({ events, colorMap, onRemove }: EventsByDat
 					<ul className="space-y-2">
 						{eventsByDate[date].map((event) => {
 							const normalizedTitle = (event.summary || "(Senza titolo)").trim()
-							const bgColor = colorMap[normalizedTitle]
+							const backgroundColor = colorMap[normalizedTitle]
 							return (
 								<li
 									id={`event-${event.id}`}
 									key={event.id}
-									style={{ backgroundColor: bgColor }}
+									style={{ backgroundColor }}
 									className="p-2 rounded hover:bg-gray-50 flex justify-between print:p-0 print:border print:border-t-0 print:border-x-0 print:rounded-none"
 								>
 									<EventItem event={event} />
 									<button
-										onClick={() => onRemove(event.id)}
+										onClick={() => onRemove(event)}
 										className="text-sm text-red-600 hover:text-red-800 cursor-pointer print:hidden"
 									>
 										<MdClose />
