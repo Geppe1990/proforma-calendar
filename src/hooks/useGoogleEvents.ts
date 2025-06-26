@@ -45,7 +45,7 @@ export function useGoogleEvents(token: string | null, year: number, month: numbe
 				const visibleEvents = (data.items || []).filter((event: CalendarEvent) => {
 					const startTime = event.start?.dateTime ?? event.start?.date
 					if (!event.id || !startTime) return true
-					const key = `${event.id}_${startTime.replaceAll(":", "").replaceAll("-", "")}`
+					const key = `${event.id}`
 					const hiddenEntry = hidden[key]
 					return !(
 						hiddenEntry &&
@@ -75,7 +75,7 @@ export function useGoogleEvents(token: string | null, year: number, month: numbe
 		const hidden = getHiddenEvents()
 		const startTime = event.start?.dateTime ?? event.start?.date
 		if (!event.id || !startTime) return
-		const key = `${event.id}_${startTime.replaceAll(":", "").replaceAll("-", "")}`
+		const key = `${event.id}`
 
 		hidden[key] = { year: yearStr, month: monthStr }
 		saveHiddenEvents(hidden)
