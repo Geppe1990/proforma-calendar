@@ -27,6 +27,18 @@ function formatEventTime(e: CalendarEvent) {
 	return `${start.format("DD/MM/YYYY")} ${start.format("HH:mm")} – ${end.format("HH:mm")}`
 }
 
+function scrollToEvent(id: string) {
+	const el = document.getElementById(`event-${id}`)
+	if (el) {
+		el.scrollIntoView({ behavior: "smooth", block: "start" })
+		el.classList.add("ring-2", "ring-blue-500", "transition")
+
+		setTimeout(() => {
+			el.classList.remove("ring-2", "ring-blue-500")
+		}, 2000)
+	}
+}
+
 export default function OverlappingEvents({ events }: OverlappingEventsProps) {
 	const overlaps: [CalendarEvent, CalendarEvent][] = []
 
@@ -47,10 +59,22 @@ export default function OverlappingEvents({ events }: OverlappingEventsProps) {
 				{overlaps.map(([a, b], idx) => (
 					<li key={idx}>
 						<div className="mb-1">
-							<strong>{a.summary || "(Senza titolo)"}</strong> – {formatEventTime(a)}
+							<button
+								onClick={() => scrollToEvent(a.id)}
+								className="text-blue-700 hover:underline cursor-pointer"
+							>
+								<strong>{a.summary || "(Senza titolo)"}</strong>
+							</button>{" "}
+							– {formatEventTime(a)}
 						</div>
 						<div>
-							<strong>{b.summary || "(Senza titolo)"}</strong> – {formatEventTime(b)}
+							<button
+								onClick={() => scrollToEvent(b.id)}
+								className="text-blue-700 hover:underline  cursor-pointer"
+							>
+								<strong>{b.summary || "(Senza titolo)"}</strong>
+							</button>{" "}
+							– {formatEventTime(b)}
 						</div>
 					</li>
 				))}

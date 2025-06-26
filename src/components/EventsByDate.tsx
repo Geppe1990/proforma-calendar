@@ -36,6 +36,7 @@ export default function EventsByDate({ events, colorMap, onRemove }: EventsByDat
 							const bgColor = colorMap[normalizedTitle]
 							return (
 								<li
+									id={`event-${event.id}`}
 									key={event.id}
 									style={{ backgroundColor: bgColor }}
 									className="p-2 rounded hover:bg-gray-50 flex justify-between print:p-0 print:border print:border-t-0 print:border-x-0 print:rounded-none"
