@@ -19,7 +19,7 @@ export default function Navbar() {
 	formattedMonth =
 		String(formattedMonth).charAt(0).toUpperCase() + String(formattedMonth).slice(1)
 	return (
-		<nav className="bg-gray-100 py-2 px-4 flex justify-between items-center">
+		<nav className="bg-gray-100 py-2 px-4 flex justify-between items-center print:hidden">
 			<button
 				onClick={() => handleChangeMonth(-1)}
 				className="flex items-center gap-1 text-blue-600 hover:text-blue-800 cursor-pointer"
