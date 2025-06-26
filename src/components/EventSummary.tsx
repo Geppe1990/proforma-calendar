@@ -65,7 +65,7 @@ export default function EventSummary({ events, colorMap }: EventSummaryProps) {
 							style={{
 								backgroundColor: bgColor,
 							}}
-							className={`p-2 rounded`}
+							className={`p-2 rounded print:p-0`}
 						>
 							{displayTitle}:&nbsp;<b>{formatted}</b>
 						</li>

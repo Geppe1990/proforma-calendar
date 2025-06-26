@@ -24,7 +24,7 @@ export default function EventsByDate({ events, colorMap, onRemove }: EventsByDat
 	const sortedDates = Object.keys(eventsByDate).sort()
 	return (
 		<>
-			<h2 className={"text-xl font-semibold mt-6 mb-2"}>Calendario</h2>
+			<h2 className={"text-3xl font-semibold mt-6 mb-2"}>Calendario</h2>
 			{sortedDates.map((date) => (
 				<div key={date} className="mb-6">
 					<h2 className="text-xl font-semibold mb-2">
@@ -38,7 +38,7 @@ export default function EventsByDate({ events, colorMap, onRemove }: EventsByDat
 								<li
 									key={event.id}
 									style={{ backgroundColor: bgColor }}
-									className="p-2 rounded hover:bg-gray-50 flex justify-between"
+									className="p-2 rounded hover:bg-gray-50 flex justify-between print:p-0 print:border print:border-t-0 print:border-x-0 print:rounded-none"
 								>
 									<EventItem event={event} />
 									<button

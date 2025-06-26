@@ -54,7 +54,7 @@ export default function EventsPage() {
 					</div>
 				) : (
 					<>
-						<h1 className="text-2xl font-bold mb-4">Eventi {formattedMonth}</h1>
+						<h1 className="text-3xl font-bold mb-4">Eventi {formattedMonth}</h1>
 						<>
 							<EventSummary events={events} colorMap={colorMap} />
 							<EventsByDate

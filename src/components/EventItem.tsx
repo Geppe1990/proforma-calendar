@@ -23,11 +23,12 @@ export default function EventItem({ event }: EventItemProps) {
 	}
 
 	return (
-		<div>
+		<div className={"print:flex print:items-center print:justify-between print:w-full"}>
 			<div className="font-medium">{event.summary || "(Senza titolo)"}</div>
-			<div className="text-sm text-gray-600">
+			<div className="text-sm text-gray-600 print:hidden">
 				{time} · Durata: {duration}
 			</div>
+			<div className={"hidden print:block"}>Durata: {duration}</div>
 		</div>
 	)
 }
