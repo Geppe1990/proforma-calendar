@@ -11,6 +11,7 @@ import "dayjs/locale/it"
 import Loading from "../components/Loading.tsx"
 import { eventColors } from "../constants.ts"
 import OverlappingEvents from "../components/OverlappingEvents.tsx"
+import { RestoreHiddenEventsButton } from "../components/RestoreHiddenEventsButton.tsx"
 
 export default function EventsPage() {
 	const { year, month } = useParams()
@@ -59,7 +60,10 @@ export default function EventsPage() {
 					</div>
 				) : (
 					<>
-						<h1 className="text-3xl font-bold mb-4">Eventi {formattedMonth}</h1>
+						<div className={"flex justify-between mb-4"}>
+							<h1 className="text-3xl font-bold ">Eventi {formattedMonth}</h1>
+							<RestoreHiddenEventsButton />
+						</div>
 						<OverlappingEvents events={selectedEvents} />
 						<>
 							<EventSummary events={events} colorMap={colorMap} />

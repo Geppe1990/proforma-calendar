@@ -2,9 +2,22 @@ import { useEffect, useState } from "react"
 import dayjs from "dayjs"
 import type { CalendarEvent } from "../types/CalendarEvent"
 
+const STORAGE_KEY = "hiddenEvents"
+
 export function useGoogleEvents(token: string | null, year: number, month: number) {
 	const [events, setEvents] = useState<CalendarEvent[]>([])
 	const [isLoading, setIsLoading] = useState(true)
+
+	const getHiddenEventIds = (): string[] => {
+		const data = localStorage.getItem(STORAGE_KEY)
+		return data ? JSON.parse(data) : []
+	}
+
+	const addHiddenEventId = (id: string) => {
+		const current = getHiddenEventIds()
+		const updated = [...new Set([...current, id])]
+		localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+	}
 
 	const fetchEvents = async (token: string, year: number, month: number) => {
 		const start = dayjs(`${year}-${String(month).padStart(2, "0")}-01`)
@@ -27,7 +40,11 @@ export function useGoogleEvents(token: string | null, year: number, month: numbe
 			}
 
 			const data = await res.json()
-			setEvents(data.items || [])
+			const hiddenIds = getHiddenEventIds()
+			const visibleEvents = (data.items || []).filter(
+				(event: CalendarEvent) => !hiddenIds.includes(event.id)
+			)
+			setEvents(visibleEvents)
 		} catch (error) {
 			console.error("Errore nel recupero eventi:", error)
 		}
@@ -47,6 +64,7 @@ export function useGoogleEvents(token: string | null, year: number, month: numbe
 	}, [token, year, month])
 
 	const removeEventFromView = (id: string) => {
+		addHiddenEventId(id)
 		setEvents((prev) => prev.filter((e) => e.id !== id))
 	}
 
