@@ -63,7 +63,7 @@ export function useGoogleEvents(token: string | null, year: number, month: numbe
 		}
 
 		setIsLoading(true)
-		fetchEvents().then((r) => console.log(r))
+		void fetchEvents()
 
 		return () => {
 			setEvents([])
