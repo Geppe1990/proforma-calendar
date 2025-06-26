@@ -24,8 +24,8 @@ export function useGoogleEvents(token: string | null, year: number, month: numbe
 		const fetchEvents = async () => {
 			if (!token || !year || !month) return
 
-			const start = dayjs(`${yearStr}-${monthStr}-01`).startOf("month").toISOString()
-			const end = dayjs(`${yearStr}-${monthStr}-01`).endOf("month").toISOString()
+			const start = dayjs(`${year}-${month}-01`).startOf("month").toISOString()
+			const end = dayjs(`${year}-${month}-01`).endOf("month").toISOString()
 
 			try {
 				const res = await fetch(
@@ -49,8 +49,8 @@ export function useGoogleEvents(token: string | null, year: number, month: numbe
 					const hiddenEntry = hidden[key]
 					return !(
 						hiddenEntry &&
-						hiddenEntry.year === yearStr &&
-						hiddenEntry.month === monthStr
+						hiddenEntry.year === String(year) &&
+						hiddenEntry.month === String(month)
 					)
 				})
 
@@ -69,7 +69,7 @@ export function useGoogleEvents(token: string | null, year: number, month: numbe
 			setEvents([])
 			setIsLoading(true)
 		}
-	}, [monthStr, yearStr, token, year, month])
+	}, [token, year, month])
 
 	const removeEventFromView = (event: CalendarEvent) => {
 		const hidden = getHiddenEvents()
