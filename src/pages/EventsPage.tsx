@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom"
 import { useGoogleEvents } from "../hooks/useGoogleEvents"
 import EventsByDate from "../components/EventsByDate"
 import { assignColors } from "../helpers/colors.helper"
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import { TokenContext } from "../contexts/TokenContext.ts"
 import { MdOutlinePrint } from "react-icons/md"
 import EventSummary from "../components/EventSummary.tsx"
@@ -10,12 +10,21 @@ import dayjs from "dayjs"
 import "dayjs/locale/it"
 import Loading from "../components/Loading.tsx"
 import { eventColors } from "../constants.ts"
+import OverlappingEvents from "../components/OverlappingEvents.tsx"
 
 export default function EventsPage() {
 	const { year, month } = useParams()
 	const parsedYear = Number(year)
 	const parsedMonth = Number(month)
 	const token = useContext(TokenContext)
+	const formattedMonth = dayjs(`${year}-${month}-01`)
+		.locale("it")
+		.format("MMMM YYYY")
+		.replace(/^\w/, (c: string) => c.toUpperCase())
+
+	useEffect(() => {
+		document.title = `Proforma ${formattedMonth}`
+	}, [formattedMonth])
 
 	const {
 		events,
@@ -38,10 +47,6 @@ export default function EventsPage() {
 		new Set(selectedEvents.map((e) => (e.summary || "(Senza titolo)").trim()))
 	)
 	const colorMap = assignColors(titles, eventColors)
-	const formattedMonth = dayjs(`${year}-${month}-01`)
-		.locale("it")
-		.format("MMMM YYYY")
-		.replace(/^\w/, (c: string) => c.toUpperCase())
 
 	return (
 		<>
@@ -55,6 +60,7 @@ export default function EventsPage() {
 				) : (
 					<>
 						<h1 className="text-3xl font-bold mb-4">Eventi {formattedMonth}</h1>
+						<OverlappingEvents events={selectedEvents} />
 						<>
 							<EventSummary events={events} colorMap={colorMap} />
 							<EventsByDate
